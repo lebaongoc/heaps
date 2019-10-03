@@ -87,7 +87,36 @@ class MinHeap
   #  moves it up the heap if it's smaller
   #  than it's parent node.
   def heap_down(index)
-    child_index = 1
+    while index < @store.length
+      left_child_index = 2 * index + 1 
+      right_child_index = 2 * index + 2
+      if !@store.length =< 1
+        return
+      end
+      #  If both childs exist, compare their key find min and compare to parent, swap if parent is smaller
+      if @store[left_child_index].key && @store[right_child_index].key
+        if @store[left_child_index].key < @store[right_child_index].key
+          min_child_index = left_child_index
+        elsif @store[right_child_index].key < @store[left_child_index].key
+          min_child_index = right_child_index
+        end
+        if @store[index].key > @store[min_child_index].key
+        swap(index, min_child_index)
+        index = min_child_index
+        else
+          return
+        end
+      end
+       if !@store[right_child_index].key
+        if @store[index].key > @store[left_child_index].key
+          swap(index, left_child_index)
+          index = left_child_index
+        end
+      end
+    end
+
+    # Get the index of both left child and right child
+    # find the min of the two and get that index then compare to parent swap if parent is greater than child
     while @store[child_index] != nil && @store[index].key > @store[child_index].key
       swap(index, child_index)
       index = child_index
