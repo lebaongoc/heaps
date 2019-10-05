@@ -24,12 +24,9 @@ class MinHeap
 
   # This method removes and returns an element from the heap
   #   maintaining the heap structure
-  # Time Complexity: ?
-  # Space Complexity: ?
+  # Time Complexity: O(logn)
+  # Space Complexity: O(1)
   def remove()
-    if @store.empty?
-      return nil
-    end
     swap(0,@store.length - 1)
     result = @store.pop
     heap_down(0)
@@ -52,8 +49,8 @@ class MinHeap
   end
 
   # This method returns true if the heap is empty
-  # Time complexity: ?
-  # Space complexity: ?
+  # Time complexity: O(1)
+  # Space complexity: O(1)
   def empty?
     return (@store.length == 0) ? true : false
   end
@@ -63,8 +60,8 @@ class MinHeap
   # This helper method takes an index and
   #  moves it up the heap, if it is less than it's parent node.
   #  It could be **very** helpful for the add method.
-  # Time complexity: ?
-  # Space complexity: ?
+  # Time complexity: O(logn)
+  # Space complexity: O(1)
   def heap_up(index)
     
     if index.odd?
@@ -87,47 +84,36 @@ class MinHeap
   #  moves it up the heap if it's smaller
   #  than it's parent node.
   def heap_down(index)
-    while index < @store.length
-      left_child_index = 2 * index + 1 
-      right_child_index = 2 * index + 2
-      if !@store.length =< 1
-        return
+  
+    left_child_index = 2 * index + 1 
+    right_child_index = 2 * index + 2
+    
+    if @store[left_child_index].nil?
+      return nil
+    end
+    if @store[right_child_index].nil?
+      if @store[index].key > @store[left_child_index].key
+        swap(index, left_child_index)
       end
-      #  If both childs exist, compare their key find min and compare to parent, swap if parent is smaller
-      if @store[left_child_index].key && @store[right_child_index].key
-        if @store[left_child_index].key < @store[right_child_index].key
-          min_child_index = left_child_index
-        elsif @store[right_child_index].key < @store[left_child_index].key
-          min_child_index = right_child_index
-        end
-        if @store[index].key > @store[min_child_index].key
-        swap(index, min_child_index)
-        index = min_child_index
-        else
-          return
-        end
-      end
-       if !@store[right_child_index].key
-        if @store[index].key > @store[left_child_index].key
-          swap(index, left_child_index)
-          index = left_child_index
-        end
-      end
+      return
+    end
+      #  If both child exist, compare their key find min and compare to parent, swap if parent is smaller
+    
+    if @store[left_child_index].key < @store[right_child_index].key
+      swap(left_child_index, index)
+      heap_down(left_child_index)
+    else
+      swap(right_child_index, index)
+      heap_down(left_child_index)
     end
 
-    # Get the index of both left child and right child
-    # find the min of the two and get that index then compare to parent swap if parent is greater than child
-    while @store[child_index] != nil && @store[index].key > @store[child_index].key
-      swap(index, child_index)
-      index = child_index
-      child_index = 2 * index + 1
-    end
-    p @store
   end
+
   # If you want a swap method... you're welcome
   def swap(index_1, index_2)
     temp = @store[index_1]
     @store[index_1] = @store[index_2]
     @store[index_2] = temp
   end
+
 end
